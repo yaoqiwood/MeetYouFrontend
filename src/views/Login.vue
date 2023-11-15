@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import userApi from '@/api/userApi'
+
 export default {
   name: ' LoginForm',
   data() {
@@ -65,8 +67,10 @@ export default {
   methods: {
     handleSubmit() {
       // 登录逻辑
+      userApi.login()
       // 如果登录失败，增加 loginAttempts
       // 如果 loginAttempts >= 3，显示验证码
+
     },
     refreshCaptcha() {
       this.captChaUrl = `${process.env.VUE_APP_BASE_API_URL}/getCaptcha?${new Date().getTime()}`
