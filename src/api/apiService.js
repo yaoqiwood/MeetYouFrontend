@@ -5,7 +5,7 @@ import cookieUtil from "@/utils/CookieUtil";
 const apiClient = axios.create({
     baseURL: process.env.VUE_APP_BASE_API_URL, // 使用环境变量作为基础 URL
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded', // 例如，设置内容类型
+        'Content-Type': 'application/x-www-form-urlencoded' // 例如，设置内容类型
         // 其他全局头部
     }
     // 其他配置...

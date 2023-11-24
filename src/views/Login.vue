@@ -48,6 +48,9 @@
 
 <script>
 import userApi from '@/api/userApi'
+import systemApi from "@/api/systemApi";
+import systemUtils from "@/utils/systemUtils";
+import htmlUtils from "@/utils/htmlUtils";
 
 export default {
   name: ' LoginForm',
@@ -64,10 +67,32 @@ export default {
       captChaUrl: `${process.env.VUE_APP_BASE_API_URL}/getCaptcha`
     };
   },
+  mounted() {
+    // console.log(systemUtils.isTempTokenExist())
+    if (!systemUtils.isTempTokenExist()) {
+      systemApi.getUUIDToken().then(resp => {
+        systemUtils.setTempToken(resp['tempToken'])
+        // console.log(systemUtils.getTempToken())
+      })
+    }
+  },
   methods: {
     handleSubmit() {
       // 登录逻辑
-      userApi.login()
+      let loginInf = {}
+      loginInf['webUsername'] = this.loginForm.username
+      loginInf['webPassword'] = this.loginForm.password
+      loginInf['captCha'] = this.loginForm.captcha
+      userApi.login(loginInf).then(resp => {
+        this.$alert(htmlUtils.buildHtmlStr(resp.message), '提示', {
+          dangerouslyUseHTMLString: true
+        });
+      }).catch(error => {
+        console.log(error)
+        this.$alert(htmlUtils.buildHtmlErrorStr(error.response['data']), '提示', {
+          dangerouslyUseHTMLString: true
+        });
+      })
       // 如果登录失败，增加 loginAttempts
       // 如果 loginAttempts >= 3，显示验证码
 

@@ -21,6 +21,11 @@ const cookieUtil = {
     // 获取所有 cookie
     getAllCookies() {
         return Cookies.get()
+    },
+    isCookieExist(name) {
+        let result = this.getCookie(name)
+        // console.log(result)
+        return result !== '' && result !== null && result !== undefined
     }
 }
 
