@@ -8,8 +8,8 @@ const apiUtils = {
      * @param {object} params 请求的查询参数
      * @returns {Promise} Promise 对象
      */
-    get(url, params = {}, cumstomHeader = {}) {
-        return apiClient.get(url, {params}, {headers: cumstomHeader})
+    get(url, cumstomHeader = {}) {
+        return apiClient.get(url, {headers: cumstomHeader})
             .then(response => response.data)
             .catch(error => {
                 // 处理错误
@@ -17,6 +17,19 @@ const apiUtils = {
                 throw error;
             });
     },
+    getImg(url, cumstomHeader = {}) {
+        return apiClient.get(url, {
+            headers: cumstomHeader,
+            responseType: 'arraybuffer'
+        })
+            .then(response => response.data)
+            .catch(error => {
+                // 处理错误
+                console.error('GET 请求错误:', error);
+                throw error;
+            });
+    },
+
 
     /**
      * 发送 POST 请求

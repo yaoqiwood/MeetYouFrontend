@@ -1,5 +1,4 @@
 import apiUtils from "@/utils/apiUtils";
-// import {TEMP_TOKEN_KEY} from "@/constants/systemConst";
 import systemUtils from "@/utils/systemUtils";
 
 const userApi = {
@@ -7,6 +6,12 @@ const userApi = {
         let tempToken = systemUtils.getTempToken()
         const headers = tempToken ? {TEMP_TOKEN_KEY: tempToken} : {}
         return await apiUtils.post('/login', param, headers)
+    },
+    async getChatCha() {
+        let tempToken = systemUtils.getTempToken()
+        const headers = tempToken ? {TEMP_TOKEN_KEY: tempToken} : {}
+        console.log(headers)
+        return await apiUtils.getImg('/getCaptcha?' + new Date().getTime(), headers)
     }
 }
 

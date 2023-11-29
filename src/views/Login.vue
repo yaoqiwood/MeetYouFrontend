@@ -64,8 +64,9 @@ export default {
       loginAttempts: 0,
       showCaptcha: false,
       // showCaptcha: true,
-      captChaUrl: `${process.env.VUE_APP_BASE_API_URL}/getCaptcha`
-    };
+      // captChaUrl: `${process.env.VUE_APP_BASE_API_URL}/getCaptcha`
+      captChaUrl: ''
+    }
   },
   mounted() {
     // console.log(systemUtils.isTempTokenExist())
@@ -75,6 +76,7 @@ export default {
         // console.log(systemUtils.getTempToken())
       })
     }
+    this.refreshCaptcha()
   },
   methods: {
     handleSubmit() {
@@ -88,17 +90,30 @@ export default {
           dangerouslyUseHTMLString: true
         });
       }).catch(error => {
-        console.log(error)
-        this.$alert(htmlUtils.buildHtmlErrorStr(error.response['data']), '提示', {
-          dangerouslyUseHTMLString: true
-        });
+        console.log(error['response'])
+        if (error['response']['status'] === 400 || error['response']['status'] === 401) {
+          this.showCaptcha = error['response']['data']['is_captcha_required'] === true
+          this.$alert(htmlUtils.buildHtmlErrorStr(error.response['data']['message']), '提示', {
+            dangerouslyUseHTMLString: true
+          });
+        }
       })
       // 如果登录失败，增加 loginAttempts
       // 如果 loginAttempts >= 3，显示验证码
 
     },
     refreshCaptcha() {
-      this.captChaUrl = `${process.env.VUE_APP_BASE_API_URL}/getCaptcha?${new Date().getTime()}`
+      // this.captChaUrl = `${process.env.VUE_APP_BASE_API_URL}/getCaptcha?${new Date().getTime()}`
+      userApi.getChatCha().then(resp => {
+        console.log(resp)
+        // 将二进制数据转换为 Base64 编码
+        const base64 = btoa(
+          new Uint8Array(resp)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+        this.captChaUrl = `data:image/jpeg;base64,${base64}`
+        console.log(this.captChaUrl)
+      })
     }
   },
   watch: {
