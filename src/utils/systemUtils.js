@@ -1,5 +1,5 @@
 import CookieUtil from "@/utils/CookieUtil";
-import {TEMP_TOKEN_KEY} from '@/constants/systemConst'
+import {TEMP_TOKEN_KEY, TOKEN_KEY} from '@/constants/systemConst'
 
 const systemUtils = {
     isTempTokenExist() {
@@ -10,6 +10,9 @@ const systemUtils = {
     },
     getTempToken() {
         return CookieUtil.getCookie(TEMP_TOKEN_KEY)
+    },
+    setToken(value) {
+        CookieUtil.setCookie(TOKEN_KEY, value)
     }
 }
 

@@ -76,7 +76,7 @@ export default {
         // console.log(systemUtils.getTempToken())
       })
     }
-    this.refreshCaptcha()
+    // this.refreshCaptcha()
   },
   methods: {
     handleSubmit() {
@@ -89,13 +89,20 @@ export default {
         this.$alert(htmlUtils.buildHtmlStr(resp.message), '提示', {
           dangerouslyUseHTMLString: true
         });
+        if (resp['success']) {
+          systemUtils.setToken(resp['token'])
+          this.$router.push({name: 'admin'})
+        }
       }).catch(error => {
-        console.log(error['response'])
+        // console.log(error['response'])
         if (error['response']['status'] === 400 || error['response']['status'] === 401) {
           this.showCaptcha = error['response']['data']['is_captcha_required'] === true
           this.$alert(htmlUtils.buildHtmlErrorStr(error.response['data']['message']), '提示', {
             dangerouslyUseHTMLString: true
           });
+          if (error['response']['status'] === 400) {
+            this.refreshCaptcha()
+          }
         }
       })
       // 如果登录失败，增加 loginAttempts
@@ -112,7 +119,7 @@ export default {
             .reduce((data, byte) => data + String.fromCharCode(byte), '')
         );
         this.captChaUrl = `data:image/jpeg;base64,${base64}`
-        console.log(this.captChaUrl)
+        // console.log(this.captChaUrl)
       })
     }
   },
