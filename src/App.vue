@@ -1,26 +1,11 @@
-<template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
-  <!--  <img alt="Vue logo" src="./assets/logo.png">-->
-  <!--  <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-</template>
+<script setup lang="ts">
+import { useAppStore } from "@/store/modules/app";
 
-<script>
-// import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  // components: {
-  //   HelloWorld
-  // }
-}
+const appStore = useAppStore();
 </script>
-<style>
-body {
-  margin: 0 !important;
-  overflow: hidden;
-}
-</style>
 
-
+<template>
+  <el-config-provider :locale="appStore.locale" :size="appStore.size">
+    <router-view />
+  </el-config-provider>
+</template>
